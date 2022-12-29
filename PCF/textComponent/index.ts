@@ -1,7 +1,10 @@
 import {IInputs, IOutputs} from "./generated/ManifestTypes";
 
-export class textComponent implements ComponentFramework.StandardControl<IInputs, IOutputs> {
 
+export class textComponent implements ComponentFramework.StandardControl<IInputs, IOutputs> {
+private myNotifyOutputChanged: () => void
+private myMainDiv: HTMLDivElement;
+private myTextBox: HTMLTextAreaElement;
     /**
      * Empty constructor.
      */
@@ -20,7 +23,12 @@ export class textComponent implements ComponentFramework.StandardControl<IInputs
      */
     public init(context: ComponentFramework.Context<IInputs>, notifyOutputChanged: () => void, state: ComponentFramework.Dictionary, container:HTMLDivElement): void
     {
-        // Add control initialization code
+        this.myNotifyOutputChanged = notifyOutputChanged;
+        this.myMainDiv = document.createElement("div");
+        this.myTextBox = document.createElement("textarea");
+        this.myMainDiv.appendChild(this.myTextBox);
+        container.appendChild(this.myMainDiv);
+
     }
 
 
@@ -28,6 +36,7 @@ export class textComponent implements ComponentFramework.StandardControl<IInputs
      * Called when any value in the property bag has changed. This includes field values, data-sets, global values such as container height and width, offline status, control metadata values such as label, visible, etc.
      * @param context The entire property bag available to control via Context Object; It contains values as set up by the customizer mapped to names defined in the manifest, as well as utility functions
      */
+    // eslint-disable-next-line no-unused-vars
     public updateView(context: ComponentFramework.Context<IInputs>): void
     {
         // Add code to update control view
