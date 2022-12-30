@@ -26,6 +26,7 @@ private myTextBox: HTMLTextAreaElement;
         this.myNotifyOutputChanged = notifyOutputChanged;
         this.myMainDiv = document.createElement("div");
         this.myTextBox = document.createElement("textarea");
+        this.myTextBox.value = context.parameters.textValue.raw || "" ;
         this.myMainDiv.appendChild(this.myTextBox);
         container.appendChild(this.myMainDiv);
 
@@ -40,6 +41,9 @@ private myTextBox: HTMLTextAreaElement;
     public updateView(context: ComponentFramework.Context<IInputs>): void
     {
         // Add code to update control view
+        this.myTextBox.value = context.parameters.textValue.raw || "";
+        this.myTextBox.value = this.myTextBox.value.toUpperCase();
+        this.myNotifyOutputChanged();
     }
 
     /**
@@ -48,7 +52,10 @@ private myTextBox: HTMLTextAreaElement;
      */
     public getOutputs(): IOutputs
     {
-        return {};
+        return {
+            textValue: this.myTextBox.value
+             
+        };
     }
 
     /**
