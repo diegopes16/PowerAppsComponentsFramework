@@ -5,6 +5,8 @@ export class textComponent implements ComponentFramework.StandardControl<IInputs
 private myNotifyOutputChanged: () => void
 private myMainDiv: HTMLDivElement;
 private myTextBox: HTMLTextAreaElement;
+private myIsUpperCaseOnly: boolean;
+private myLabel: HTMLLabelElement;
     /**
      * Empty constructor.
      */
@@ -25,9 +27,15 @@ private myTextBox: HTMLTextAreaElement;
     {
         this.myNotifyOutputChanged = notifyOutputChanged;
         this.myMainDiv = document.createElement("div");
+        //Textbox Creation
         this.myTextBox = document.createElement("textarea");
         this.myTextBox.value = context.parameters.textValue.raw || "" ;
         this.myMainDiv.appendChild(this.myTextBox);
+        //label Creation
+        this.myLabel = document.createElement("label");
+        this.myMainDiv.appendChild(this.myLabel);
+        this.myIsUpperCaseOnly = context.parameters.isUppercaseOnly.raw || false;
+        //append all to container
         container.appendChild(this.myMainDiv);
 
     }
@@ -42,7 +50,18 @@ private myTextBox: HTMLTextAreaElement;
     {
         // Add code to update control view
         this.myTextBox.value = context.parameters.textValue.raw || "";
-        this.myTextBox.value = this.myTextBox.value.toUpperCase();
+        
+        this.myIsUpperCaseOnly = context.parameters.isUppercaseOnly.raw || false;
+
+        if(this.myIsUpperCaseOnly)
+        {
+            this.myLabel.innerHTML = "UPPER CASE ONLY";
+            this.myTextBox.value = this.myTextBox.value.toUpperCase();
+        } else
+            {
+                this.myLabel.innerHTML = "UPPER/lower case";
+            }
+        //notify change
         this.myNotifyOutputChanged();
     }
 
@@ -53,7 +72,8 @@ private myTextBox: HTMLTextAreaElement;
     public getOutputs(): IOutputs
     {
         return {
-            textValue: this.myTextBox.value
+            textValue: this.myTextBox.value,
+            isUppercaseOnly: this.myIsUpperCaseOnly
              
         };
     }
